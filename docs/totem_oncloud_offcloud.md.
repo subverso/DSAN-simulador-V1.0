@@ -1,0 +1,132 @@
+# Totem DSAN – Modelo OnCloud / OffCloud
+
+Este documento descreve como o Totem DSAN se encaixa em um modelo híbrido de identidade:  
+**OffCloud**, ancorado em um dispositivo físico humano (totem), e **OnCloud**, apoiado pela rede DSAN de nós distribuídos e serviços em nuvem.[web:355][web:360][web:361]
+
+---
+
+## 1. Família de Totens – Dispositivo da Singularidade
+
+O Totem DSAN não é um único formato físico, mas uma **família de dispositivos** que evolui com a tecnologia:
+
+- Fase 1 – Hardware “clássico”:  
+  - dispositivo dedicado (tipo chave de segurança / hardware wallet);  
+  - display simples, biometria básica, NFC/BLE.
+
+- Fase 2 – Totem vestível:  
+  - anéis, pulseiras, colares, brincos, relógios com secure element, sensores biométricos e conectividade;  
+  - autenticação contínua baseada em presença física + sinais vitais.[web:350][web:354][web:357][web:363]
+
+- Fase 3 – Totem integrado ao corpo:  
+  - tatuagens eletrônicas, patches de pele, implantes discretos com nanoeletrônica e sensores;  
+  - dispositivo torna‑se parte do corpo, mas preserva as mesmas regras de soberania.
+
+Independente da forma (gadget, joia, tatuagem ou implante), **a função é a mesma**:  
+ser o **root of trust humano** para identidade, ativos digitais e agentes de IA.
+
+---
+
+## 2. Modelo OffCloud – O que nunca sai do Totem
+
+OffCloud é tudo que vive **exclusivamente dentro do Totem**.  
+Nada disso deve ser exposto em claro a qualquer serviço online ou dispositivo genérico.
+
+Elementos principais do domínio OffCloud:
+
+1. **Chave raiz de identidade (seed / master key)**  
+   - Usada para derivar DIDs, credenciais e chaves de sessão.  
+   - Gerada e armazenada em hardware seguro (secure element, PUF, etc.).[web:302][web:347]
+
+2. **Prova de humanidade e presença**  
+   - Biometria local (ex.: digital, face, veia, ECG) com verificação de liveness.  
+   - Avaliação contínua de “pessoa viva presente”, sem envio de templates crus para a nuvem.[web:299][web:301][web:355][web:360]
+
+3. **Políticas locais de autorização**  
+   - Regras que definem o que o Totem pode ou não assinar:  
+     - limites de valor,  
+     - tipos de contratos,  
+     - permissões de agentes de IA,  
+     - gatilhos que exigem confirmação reforçada (biometria + PIN).  
+   - Essas políticas são configuradas pelo usuário e aplicadas localmente antes de qualquer assinatura.
+
+4. **Histórico local mínimo e logs sensíveis**  
+   - Registros compactos das últimas decisões críticas tomadas pelo Totem (ex.: “assinou contrato X”, “autorizou agente Y até data Z”).  
+   - Servem para auditoria pessoal e verificação de anomalias, sem depender da nuvem.
+
+Princípio central OffCloud:  
+> “Tudo que define *quem sou eu* e *o que eu posso fazer* deve residir no Totem, sob meu controle físico.”
+
+---
+
+## 3. Modelo OnCloud – O que a rede DSAN faz em volta
+
+OnCloud é o conjunto de serviços e componentes que rodam **fora** do Totem:  
+nós DSAN, servidores de terceiros, nuvens públicas/privadas, agentes de IA hospedados.
+
+Elementos principais do domínio OnCloud:[web:342][web:356][web:361]
+
+1. **Rede DSAN distribuída**  
+   - Nó(s) que mantém:  
+     - resoluções de DIDs,  
+     - listas de revogação,  
+     - metadados de confiança (quem emitiu o quê, quando).  
+   - Não armazena chaves privadas nem biometria; apenas dados necessários para verificação.
+
+2. **Agentes de IA e serviços associados**  
+   - Agentes que atuam em nome do usuário: automatização de tarefas, monitoramento, recomendações, execução limitada de ações.  
+   - Cada agente possui credenciais derivadas e permissões explícitas dadas pelo Totem.
+
+3. **Backups criptografados e recuperação**  
+   - Mecanismos para restaurar identidade em caso de perda física do Totem, como:  
+     - fragmentação de segredo entre guardiões de confiança,  
+     - cofres criptografados acessíveis apenas com múltiplas provas.  
+   - Toda criptografia e controle de chaves continua ancorada em material OffCloud que não sai do Totem.
+
+4. **Auditoria distribuída e conformidade**  
+   - Logs públicos ou semi‑públicos de eventos de alto impacto (ex.: criação de novos totens, revogações, atualizações de políticas globais).  
+   - Suporte a requisitos legais e regulatórios sem sacrificar a soberania individual.
+
+Princípio central OnCloud:  
+> “A nuvem e a rede DSAN existem para coordenar, auditar e dar resiliência, nunca para substituir o Totem como autoridade final.”
+
+---
+
+## 4. A Ponte OnCloud / OffCloud
+
+O valor de DSAN está na **interface controlada** entre OffCloud e OnCloud.
+
+Regras de desenho da ponte:
+
+1. **Assinatura antes de exposição**  
+   - O Totem nunca envia segredo; ele recebe uma solicitação, aplica suas políticas locais e devolve apenas:  
+     - uma assinatura,  
+     - um “sim/não”,  
+     - ou uma prova criptográfica de que certas condições foram atendidas.[web:302][web:347][web:355]
+
+2. **Provas, não dados crus**  
+   - Biometria, sinais vitais e fatores de presença são usados para gerar decisões e tokens no Totem.  
+   - A nuvem recebe somente o resultado da decisão (“autorizado”, “negado”, “limite excedido”), nunca o template biométrico original.[web:355][web:360]
+
+3. **Políticas declarativas**  
+   - Certas regras podem ser publicadas OnCloud (ex.: “este Totem não assina transações acima de X sem múltipla confirmação”) para transparência e confiança.  
+   - A interpretação final dessas regras, porém, é sempre feita OffCloud no dispositivo.
+
+4. **Fallback e recuperação controlada**  
+   - Em cenários de perda ou dano do Totem, o processo de recuperação usa recursos OnCloud (guardians, cofres, etc.),  
+   - mas exige múltiplas provas e confirmações humanas, evitando que qualquer serviço na nuvem recrie a identidade sozinho.
+
+---
+
+## 5. Visão de longo prazo
+
+No longo prazo, o Totem DSAN deve ser visto como um **dispositivo da singularidade pessoal**:
+
+- evolui de hardware dedicado para joias, vestíveis e depois implantes,  
+- mantém a linha clara entre o que é **OnCloud** (rede, IA, coordenação) e **OffCloud** (soberania humana, chaves, decisões irreversíveis),  
+- sustenta um novo campo profissional:  
+  - engenharia de totem,  
+  - segurança de totem,  
+  - design de totem (entre joalheria, bioengenharia e UX).
+
+DSAN não compete com a nuvem; ele redefine o papel da nuvem em torno de um centro físico:  
+**o corpo humano com seu Totem OffCloud.**[web:350][web:359][web:361]
