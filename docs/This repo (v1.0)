@@ -1,0 +1,5 @@
+**Simulator**: Android app demonstrating:  
+- BIP39 → DID generation  
+- NFC credential mock  
+- PIN unlock  
+- QR recovery  
