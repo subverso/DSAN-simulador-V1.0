@@ -1,5 +1,5 @@
 import random
-import time
+from .agent import DSANAgent
 from typing import List
 from dsan_sim.agent import DSANAgent
 
